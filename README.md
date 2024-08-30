@@ -14,5 +14,3 @@ We prefer to use the headless mode option since it is most reproducible.
 One of the major downfalls of headless mode is that you can not run in parallel.
 
 CP Parallel comes in to solve this issue by using a dictionary to call multiple instances of CellProfiler, run in parallel, and output a log file per process.
-The current functionality is to run multiple plates in parallel.
-Future implementation will include running multiple wells in the same plate in parallel.

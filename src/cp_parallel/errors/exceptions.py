@@ -1,5 +1,5 @@
 """
-This class defines a custom exception class for exceeding the max workers on a machine.
+This module defines custom exceptions for cp_parallel.
 """
 
 class MaxWorkerError(Exception):
