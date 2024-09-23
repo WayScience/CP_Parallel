@@ -13,7 +13,7 @@ from concurrent.futures import Future, ProcessPoolExecutor
 from logging import FileHandler, Formatter
 from typing import List, Dict
 
-from errors.exceptions import MaxWorkerError
+from exceptions import MaxWorkerError
 
 
 def results_to_log(
