@@ -168,6 +168,7 @@ cp_parallel.run_cellprofiler_parallel(
 ```
 
 `run_with_apptainer` wraps each command as `apptainer exec <image> cellprofiler ...` (or `singularity exec` if that's what's on `PATH` instead).
+Pass `max_workers=-1` (or `max_workers="all"`) to use every CPU available to the job.
 `max_workers` is validated against the CPUs available to the *job* (via `os.sched_getaffinity` where supported), not the full host, so it plays well with SLURM/cgroup allocations.
 
 ### CellProfiler plugins
@@ -199,7 +200,7 @@ Each value is a dict with:
 
 ## API
 
-- `run_cellprofiler_parallel(plate_info_dictionary, run_name, group_level="plate", max_workers=None, log_dir="./logs", plugins_dir=None, run_with_apptainer=None, conserve_memory=False)` — runs CellProfiler for every entry in parallel and returns the list of `subprocess.CompletedProcess` results.
+- `run_cellprofiler_parallel(plate_info_dictionary, run_name, group_level="plate", max_workers=None, log_dir="./logs", plugins_dir=None, run_with_apptainer=None, conserve_memory=False)` — runs CellProfiler for every entry in parallel and returns the list of `subprocess.CompletedProcess` results. `max_workers` accepts a positive int, `-1`/`"all"` (use every available CPU), or `None` (one worker per entry, capped to available CPUs).
 - `results_to_log(results, log_dir, run_name, jobs=None, group_level="plate")` — writes one log file per result; called automatically by `run_cellprofiler_parallel`.
 - `MaxWorkerError` — raised when `max_workers` is explicitly set higher than the CPUs available to the process.
 - `PlateInfoError` — raised when a `plate_info_dictionary` entry is missing required keys or combines `path_to_images`/`path_to_loaddata` incorrectly.

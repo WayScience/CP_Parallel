@@ -223,7 +223,7 @@ def run_cellprofiler_parallel(
     plate_info_dictionary: dict[str, dict[str, Any]],
     run_name: str,
     group_level: GroupLevel = "plate",
-    max_workers: int | None = None,
+    max_workers: int | Literal["all"] | None = None,
     log_dir: PathLike = "./logs",
     plugins_dir: PathLike | None = None,
     run_with_apptainer: PathLike | None = None,
@@ -265,7 +265,8 @@ def run_cellprofiler_parallel(
             to the number of CPUs available to this process (see
             `_get_available_cpu_count`). If explicitly set higher than the
             available CPU count, raises `MaxWorkerError` rather than
-            silently oversubscribing the machine/job.
+            silently oversubscribing the machine/job. Pass ``-1`` or ``"all"``
+            to use every CPU available to this process.
         log_dir: directory to write one log file per process into.
         plugins_dir: path to a CellProfiler plugins directory, if your pipeline
             uses plugin modules. Applies to all entries unless overridden by a
@@ -290,6 +291,8 @@ def run_cellprofiler_parallel(
             when `group_level="well"`.
         MaxWorkerError: if `max_workers` is explicitly set higher than the
             number of CPUs available to this process.
+        ValueError: if `max_workers` is not a positive integer, ``-1``,
+            ``"all"``, or ``None``.
         EnvironmentError: if `run_with_apptainer` is set but neither
             `apptainer` nor `singularity` is available on PATH.
     """
@@ -318,6 +321,17 @@ def run_cellprofiler_parallel(
     available_cpus = _get_available_cpu_count()
     if max_workers is None:
         num_workers = min(len(jobs), available_cpus) or 1
+    elif max_workers == "all" or max_workers == -1:
+        num_workers = available_cpus
+    elif (
+        isinstance(max_workers, bool)
+        or not isinstance(max_workers, int)
+        or max_workers < 1
+    ):
+        raise ValueError(
+            f"max_workers must be a positive integer, -1, 'all', or None; "
+            f"got {max_workers!r}."
+        )
     elif max_workers > available_cpus:
         raise MaxWorkerError(
             f"Requested max_workers={max_workers} exceeds the {available_cpus} "

@@ -208,6 +208,64 @@ def test_max_workers_exceeding_available_cpus_raises(
         )
 
 
+@pytest.mark.parametrize("all_workers", [-1, "all"])
+def test_max_workers_all_uses_every_available_cpu(
+    pipeline_file,
+    images_dir,
+    output_dir,
+    log_dir,
+    fake_cellprofiler_run,
+    monkeypatch,
+    all_workers,
+):
+    monkeypatch.setattr(cp_parallel_module, "_get_available_cpu_count", lambda: 8)
+    recorded_max_workers = {}
+    real_executor = ThreadPoolExecutor
+
+    class RecordingExecutor(real_executor):
+        def __init__(self, max_workers=None, *args, **kwargs):
+            recorded_max_workers["value"] = max_workers
+            super().__init__(*args, max_workers=max_workers, **kwargs)
+
+    monkeypatch.setattr(cp_parallel_module, "ProcessPoolExecutor", RecordingExecutor)
+
+    cp_parallel_module.run_cellprofiler_parallel(
+        plate_info_dictionary={
+            "Plate1": {
+                "path_to_pipeline": pipeline_file,
+                "path_to_images": images_dir,
+                "path_to_output": output_dir,
+            }
+        },
+        run_name="run",
+        max_workers=all_workers,
+        log_dir=log_dir,
+    )
+
+    assert recorded_max_workers["value"] == 8
+
+
+@pytest.mark.parametrize("bad_value", [0, -2, "some", 2.5, True])
+def test_invalid_max_workers_raises(
+    pipeline_file, images_dir, output_dir, log_dir, monkeypatch, bad_value
+):
+    monkeypatch.setattr(cp_parallel_module, "_get_available_cpu_count", lambda: 8)
+
+    with pytest.raises(ValueError, match="max_workers"):
+        cp_parallel_module.run_cellprofiler_parallel(
+            plate_info_dictionary={
+                "Plate1": {
+                    "path_to_pipeline": pipeline_file,
+                    "path_to_images": images_dir,
+                    "path_to_output": output_dir,
+                }
+            },
+            run_name="run",
+            max_workers=bad_value,
+            log_dir=log_dir,
+        )
+
+
 def test_default_max_workers_caps_to_available_cpus(
     pipeline_file, images_dir, output_dir, log_dir, monkeypatch
 ):
