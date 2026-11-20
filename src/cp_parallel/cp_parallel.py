@@ -219,7 +219,7 @@ def results_to_log(
             log_file.write(output_string)
 
 
-def run_cellprofiler_parallel(
+def run_parallel(
     plate_info_dictionary: dict[str, dict[str, Any]],
     run_name: str,
     group_level: GroupLevel = "plate",

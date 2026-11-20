@@ -55,4 +55,4 @@ jobs:
       - name: Install the package (no dev dependencies)
         run: pip install .
       - name: Import sanity check
-        run: python -c "import cp_parallel; print(cp_parallel.run_cellprofiler_parallel)"
+        run: python -c "import cp_parallel; print(cp_parallel.run_parallel)"

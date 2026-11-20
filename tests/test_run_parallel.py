@@ -1,5 +1,5 @@
 """
-End-to-end tests for run_cellprofiler_parallel.
+End-to-end tests for run_parallel.
 
 These tests never invoke a real `cellprofiler` binary: `ProcessPoolExecutor` is
 swapped for `ThreadPoolExecutor` (so mocks applied in the test process are
@@ -49,7 +49,7 @@ def test_single_plate_run(
         }
     }
 
-    results = cp_parallel_module.run_cellprofiler_parallel(
+    results = cp_parallel_module.run_parallel(
         plate_info_dictionary=plate_info_dictionary,
         run_name="whole_image_qc",
         log_dir=log_dir,
@@ -76,7 +76,7 @@ def test_multi_plate_run(
         for i in range(1, 4)
     }
 
-    results = cp_parallel_module.run_cellprofiler_parallel(
+    results = cp_parallel_module.run_parallel(
         plate_info_dictionary=plate_info_dictionary,
         run_name="analysis",
         log_dir=log_dir,
@@ -106,7 +106,7 @@ def test_well_level_run_nests_logs_under_plate(
         },
     }
 
-    cp_parallel_module.run_cellprofiler_parallel(
+    cp_parallel_module.run_parallel(
         plate_info_dictionary=plate_info_dictionary,
         run_name="well_qc",
         group_level="well",
@@ -132,7 +132,7 @@ def test_well_level_missing_plate_name_raises(
     }
 
     with pytest.raises(PlateInfoError):
-        cp_parallel_module.run_cellprofiler_parallel(
+        cp_parallel_module.run_parallel(
             plate_info_dictionary=plate_info_dictionary,
             run_name="well_qc",
             group_level="well",
@@ -142,7 +142,7 @@ def test_well_level_missing_plate_name_raises(
 
 def test_invalid_group_level_raises(pipeline_file, images_dir, output_dir, log_dir):
     with pytest.raises(ValueError):
-        cp_parallel_module.run_cellprofiler_parallel(
+        cp_parallel_module.run_parallel(
             plate_info_dictionary={
                 "Plate1": {
                     "path_to_pipeline": pipeline_file,
@@ -178,7 +178,7 @@ def test_max_workers_within_limit_is_used(
         }
     }
 
-    cp_parallel_module.run_cellprofiler_parallel(
+    cp_parallel_module.run_parallel(
         plate_info_dictionary=plate_info_dictionary,
         run_name="run",
         max_workers=4,
@@ -194,7 +194,7 @@ def test_max_workers_exceeding_available_cpus_raises(
     monkeypatch.setattr(cp_parallel_module, "_get_available_cpu_count", lambda: 2)
 
     with pytest.raises(MaxWorkerError):
-        cp_parallel_module.run_cellprofiler_parallel(
+        cp_parallel_module.run_parallel(
             plate_info_dictionary={
                 "Plate1": {
                     "path_to_pipeline": pipeline_file,
@@ -229,7 +229,7 @@ def test_max_workers_all_uses_every_available_cpu(
 
     monkeypatch.setattr(cp_parallel_module, "ProcessPoolExecutor", RecordingExecutor)
 
-    cp_parallel_module.run_cellprofiler_parallel(
+    cp_parallel_module.run_parallel(
         plate_info_dictionary={
             "Plate1": {
                 "path_to_pipeline": pipeline_file,
@@ -252,7 +252,7 @@ def test_invalid_max_workers_raises(
     monkeypatch.setattr(cp_parallel_module, "_get_available_cpu_count", lambda: 8)
 
     with pytest.raises(ValueError, match="max_workers"):
-        cp_parallel_module.run_cellprofiler_parallel(
+        cp_parallel_module.run_parallel(
             plate_info_dictionary={
                 "Plate1": {
                     "path_to_pipeline": pipeline_file,
@@ -296,7 +296,7 @@ def test_default_max_workers_caps_to_available_cpus(
         for i in range(1, 6)  # 5 plates requested, only 2 CPUs available
     }
 
-    cp_parallel_module.run_cellprofiler_parallel(
+    cp_parallel_module.run_parallel(
         plate_info_dictionary=plate_info_dictionary,
         run_name="run",
         log_dir=log_dir,
@@ -317,7 +317,7 @@ def test_nonzero_returncode_is_logged(
     )
 
     with caplog.at_level(logging.ERROR, logger=cp_parallel_module.__name__):
-        cp_parallel_module.run_cellprofiler_parallel(
+        cp_parallel_module.run_parallel(
             plate_info_dictionary={
                 "Plate1": {
                     "path_to_pipeline": pipeline_file,
@@ -336,7 +336,7 @@ def test_nonzero_returncode_is_logged(
 def test_loaddata_csv_run(
     pipeline_file, loaddata_csv, output_dir, log_dir, fake_cellprofiler_run
 ):
-    cp_parallel_module.run_cellprofiler_parallel(
+    cp_parallel_module.run_parallel(
         plate_info_dictionary={
             "Plate1": {
                 "path_to_pipeline": pipeline_file,
@@ -357,7 +357,7 @@ def test_image_set_batches_share_log_dir_without_collisions(
 ):
     """Simulates a large run split into image-set batches, one call per batch."""
     for batch_index, (first, last) in enumerate([(1, 50), (51, 100)]):
-        cp_parallel_module.run_cellprofiler_parallel(
+        cp_parallel_module.run_parallel(
             plate_info_dictionary={
                 f"batch_{batch_index}": {
                     "path_to_pipeline": pipeline_file,

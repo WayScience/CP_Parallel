@@ -79,7 +79,7 @@ plate_info_dictionary = {
     },
 }
 
-cp_parallel.run_cellprofiler_parallel(
+cp_parallel.run_parallel(
     plate_info_dictionary=plate_info_dictionary,
     run_name="whole_image_qc",
 )
@@ -101,7 +101,7 @@ plate_info_dictionary = {
     },
 }
 
-cp_parallel.run_cellprofiler_parallel(
+cp_parallel.run_parallel(
     plate_info_dictionary=plate_info_dictionary,
     run_name="feature_extraction",
 )
@@ -127,7 +127,7 @@ plate_info_dictionary = {
     },
 }
 
-cp_parallel.run_cellprofiler_parallel(
+cp_parallel.run_parallel(
     plate_info_dictionary=plate_info_dictionary,
     run_name="well_qc",
     group_level="well",
@@ -141,7 +141,7 @@ This is useful for a timelapse dataset, checkpointing progress on a long run, or
 
 ```python
 for batch_index, (first, last) in enumerate([(1, 100), (101, 200)]):
-    cp_parallel.run_cellprofiler_parallel(
+    cp_parallel.run_parallel(
         plate_info_dictionary={
             f"batch_{batch_index}": {
                 "path_to_pipeline": "pipelines/analysis.cppipe",
@@ -159,7 +159,7 @@ for batch_index, (first, last) in enumerate([(1, 100), (101, 200)]):
 ### Running on an HPC cluster via Apptainer/Singularity
 
 ```python
-cp_parallel.run_cellprofiler_parallel(
+cp_parallel.run_parallel(
     plate_info_dictionary=plate_info_dictionary,
     run_name="feature_extraction",
     run_with_apptainer="/path/to/cellprofiler.sif",
@@ -174,7 +174,7 @@ Pass `max_workers=-1` (or `max_workers="all"`) to use every CPU available to the
 ### CellProfiler plugins
 
 ```python
-cp_parallel.run_cellprofiler_parallel(
+cp_parallel.run_parallel(
     plate_info_dictionary=plate_info_dictionary,
     run_name="analysis",
     plugins_dir="/path/to/cellprofiler-plugins",
@@ -200,8 +200,8 @@ Each value is a dict with:
 
 ## API
 
-- `run_cellprofiler_parallel(plate_info_dictionary, run_name, group_level="plate", max_workers=None, log_dir="./logs", plugins_dir=None, run_with_apptainer=None, conserve_memory=False)` — runs CellProfiler for every entry in parallel and returns the list of `subprocess.CompletedProcess` results. `max_workers` accepts a positive int, `-1`/`"all"` (use every available CPU), or `None` (one worker per entry, capped to available CPUs).
-- `results_to_log(results, log_dir, run_name, jobs=None, group_level="plate")` — writes one log file per result; called automatically by `run_cellprofiler_parallel`.
+- `run_parallel(plate_info_dictionary, run_name, group_level="plate", max_workers=None, log_dir="./logs", plugins_dir=None, run_with_apptainer=None, conserve_memory=False)` — runs CellProfiler for every entry in parallel and returns the list of `subprocess.CompletedProcess` results. `max_workers` accepts a positive int, `-1`/`"all"` (use every available CPU), or `None` (one worker per entry, capped to available CPUs).
+- `results_to_log(results, log_dir, run_name, jobs=None, group_level="plate")` — writes one log file per result; called automatically by `run_parallel`.
 - `MaxWorkerError` — raised when `max_workers` is explicitly set higher than the CPUs available to the process.
 - `PlateInfoError` — raised when a `plate_info_dictionary` entry is missing required keys or combines `path_to_images`/`path_to_loaddata` incorrectly.
 
