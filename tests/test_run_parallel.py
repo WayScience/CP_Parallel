@@ -151,7 +151,7 @@ def test_invalid_group_level_raises(pipeline_file, images_dir, output_dir, log_d
                 }
             },
             run_name="run",
-            group_level="field",  # type: ignore[arg-type]
+            group_level="field",  # ty: ignore[invalid-argument-type]
             log_dir=log_dir,
         )
 

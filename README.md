@@ -224,12 +224,12 @@ uv sync --group dev
 uv run pytest --cov=cp_parallel
 ```
 
-`uv sync` creates a `.venv` with the package installed in editable mode plus the `dev` dependency group (`pytest`, `pytest-cov`, `ruff`, `pre-commit`); `uv run` executes a command inside it without needing to activate it manually.
+`uv sync` creates a `.venv` with the package installed in editable mode plus the `dev` dependency group (`pytest`, `pytest-cov`, `ruff`, `ty`, `pre-commit`); `uv run` executes a command inside it without needing to activate it manually.
 If you'd rather activate the environment yourself, `source .venv/bin/activate` works as usual afterward.
 
 Tests never invoke a real `cellprofiler`/`apptainer` binary: `subprocess.run` is mocked, and `ProcessPoolExecutor` is swapped for `ThreadPoolExecutor` so the mocks apply inside "worker" threads.
 
-### Linting
+### Linting and type checking
 
 [`ruff`](https://docs.astral.sh/ruff/) handles both linting and formatting:
 
@@ -238,7 +238,13 @@ uv run ruff check . --fix
 uv run ruff format .
 ```
 
-[`pre-commit`](https://pre-commit.com/) runs the same `ruff` checks (plus a few basic hygiene hooks: trailing whitespace, end-of-file newlines, line endings, large-file and merge-conflict checks) automatically on each commit.
+[`ty`](https://docs.astral.sh/ty/) type-checks the package and tests, targeting Python 3.8 (the package's `requires-python` floor) so it catches anything that wouldn't run in an older CellProfiler environment:
+
+```bash
+uv run ty check
+```
+
+[`pre-commit`](https://pre-commit.com/) runs the same `ruff` and `ty` checks (plus a few basic hygiene hooks: trailing whitespace, end-of-file newlines, line endings, large-file and merge-conflict checks) automatically on each commit.
 Install the git hook once per clone:
 
 ```bash

@@ -17,3 +17,14 @@ repos:
       - id: check-toml
       - id: check-added-large-files
       - id: check-merge-conflict
+
+  - repo: local
+    hooks:
+      - id: ty
+        name: ty check
+        # Runs the ty version pinned in uv.lock (dev group), so pre-commit and
+        # `uv run ty check` always agree.
+        entry: uv run ty check
+        language: system
+        types: [python]
+        pass_filenames: false
