@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v10.4.0
       - name: Install dependencies
         run: uv sync --group dev
       - name: Run pre-commit
@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v10.4.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -56,3 +56,26 @@ jobs:
         run: pip install .
       - name: Import sanity check
         run: python -c "import cp_parallel; print(cp_parallel.run_parallel)"
+
+  install-from-github:
+    # Installs the package the way the README tells users to -- straight from a
+    # GitHub URL with `pip install git+https://...` -- with no local checkout, so
+    # it catches anything missing from the built package (e.g. files only present
+    # in the repo tree). Pinned to the commit under test: for a PR, that's the
+    # PR's head commit, which GitHub exposes on the base repo even for forks.
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.12"]
+    env:
+      INSTALL_URL: git+https://github.com/${{ github.repository }}.git@${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install from GitHub URL
+        run: pip install "$INSTALL_URL"
+      - name: Import sanity check (outside any source tree)
+        working-directory: ${{ runner.temp }}
+        run: |
+          python -c "import cp_parallel; print(cp_parallel.__file__); print(cp_parallel.run_parallel)"
