@@ -214,6 +214,13 @@ Each value is a dict with:
    If it used a differently-named key (e.g. `data_file`), rename it to `path_to_loaddata`.
 5. Run the repo's existing CellProfiler step once to confirm log files land where expected, then remove the deleted file from version control.
 
+## Citation
+
+If you use `cp_parallel` in your work, please cite it using [`CITATION.cff`](CITATION.cff) (GitHub's "Cite this repository" button generates APA/BibTeX from it).
+Since `cp_parallel` runs CellProfiler, please also cite CellProfiler:
+
+> Stirling DR, Swain-Bowden MJ, Lucas AM, Carpenter AE, Cimini BA, Goodman A. CellProfiler 4: improvements in speed, utility and usability. *BMC Bioinformatics* 22, 433 (2021). https://doi.org/10.1186/s12859-021-04344-9
+
 ## Development
 
 This project uses [`uv`](https://docs.astral.sh/uv/) to manage its environment and dependencies (`uv.lock` pins them for reproducible installs).

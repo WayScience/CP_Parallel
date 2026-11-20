@@ -1,0 +1,50 @@
+cff-version: 1.2.0
+message: >-
+  If you use cp_parallel in your work, please cite it using the metadata below,
+  and also cite CellProfiler, which cp_parallel runs (see "references").
+title: "cp_parallel: run CellProfiler headless in parallel across plates or wells"
+type: software
+authors:
+  - given-names: Jenna
+    family-names: Tomkinson
+    affiliation: University of Colorado Anschutz Medical Campus
+  - given-names: Dave
+    family-names: Bunten
+    affiliation: University of Colorado Anschutz Medical Campus
+  - given-names: Mike
+    family-names: Lippincott
+    affiliation: University of Colorado Anschutz Medical Campus
+repository-code: "https://github.com/WayScience/CP_Parallel"
+abstract: >-
+  cp_parallel is a small Python package that runs CellProfiler headless on
+  multiple plates (or wells) in parallel, writing one log file per run. It
+  supports plate- and well-level grouping, LoadData CSVs, batch processing by
+  image-set range, and running inside Apptainer/Singularity containers on HPC.
+keywords:
+  - CellProfiler
+  - Cell Painting
+  - image analysis
+  - parallel processing
+  - high-content screening
+license: BSD-3-Clause
+references:
+  - type: article
+    title: "CellProfiler 4: improvements in speed, utility and usability"
+    authors:
+      - given-names: David R.
+        family-names: Stirling
+      - given-names: Madison J.
+        family-names: Swain-Bowden
+      - given-names: Alice M.
+        family-names: Lucas
+      - given-names: Anne E.
+        family-names: Carpenter
+      - given-names: Beth A.
+        family-names: Cimini
+      - given-names: Allen
+        family-names: Goodman
+    journal: BMC Bioinformatics
+    volume: 22
+    start: 433
+    year: 2021
+    doi: 10.1186/s12859-021-04344-9
