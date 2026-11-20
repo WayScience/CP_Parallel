@@ -1,0 +1,87 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history + tags, so setuptools-scm sees the real version
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.4.0
+      - name: Install dependencies
+        run: uv sync --group dev
+      - name: Run pre-commit
+        run: uv run pre-commit run --all-files
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Kept in sync with `[tool.uv] environments` in pyproject.toml: the dev
+        # dependency group (pytest, pre-commit, ...) only resolves on these
+        # versions. Compatibility with CellProfiler's own (older) Python, down to
+        # the package's real `requires-python` floor, is covered by the
+        # `compat` job below instead, via a plain `pip install` with no dev deps.
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history + tags, so setuptools-scm sees the real version
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.4.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: uv sync --group dev
+      - name: Run tests
+        run: uv run pytest --cov=cp_parallel --cov-report=term-missing
+
+  compat:
+    # Smoke-tests that the published package itself -- no dev tooling -- still
+    # installs and imports on the older Python versions that real CellProfiler
+    # conda environments commonly run (e.g. CellProfiler 4.x on Python 3.8).
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history + tags, so setuptools-scm sees the real version
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install the package (no dev dependencies)
+        run: pip install .
+      - name: Import sanity check
+        run: python -c "import cp_parallel; print(cp_parallel.run_parallel)"
+
+  install-from-github:
+    # Installs the package the way the README tells users to -- straight from a
+    # GitHub URL with `pip install git+https://...` -- with no local checkout, so
+    # it catches anything missing from the built package (e.g. files only present
+    # in the repo tree). Pinned to the commit under test: for a PR, that's the
+    # PR's head commit, which GitHub exposes on the base repo even for forks.
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.12"]
+    env:
+      INSTALL_URL: git+https://github.com/${{ github.repository }}.git@${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install from GitHub URL
+        run: pip install "$INSTALL_URL"
+      - name: Import sanity check (outside any source tree)
+        working-directory: ${{ runner.temp }}
+        run: |
+          python -c "import cp_parallel; print(cp_parallel.__file__); print(cp_parallel.run_parallel)"

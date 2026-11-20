@@ -1,0 +1,56 @@
+<svg width="480" height="200" viewBox="0 0 480 200"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-label="cp_parallel logo: three cells running down parallel tracks, with CP set into the top track and Parallel set into the bottom track">
+    <title>cp_parallel</title>
+    <defs>
+        <linearGradient id="wordmark" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#0d9488" />
+            <stop offset="50%" stop-color="#0891b2" />
+            <stop offset="100%" stop-color="#2563eb" />
+        </linearGradient>
+    </defs>
+
+    <g>
+        <line x1="177.58" y1="50" x2="400.00" y2="50"
+              stroke="#0d9488" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+        <rect x="251.93" y="46.50" width="7" height="7" fill="#0d9488" opacity="0.9" />
+        <rect x="329.77" y="46.50" width="7" height="7" fill="#0d9488" opacity="0.9" />
+        <polygon points="420.00,50.00 400.00,43.00 400.00,57.00" fill="#0d9488" />
+        <polygon points="96.00,50.00 83.00,72.52 57.00,72.52 44.00,50.00 57.00,27.48 83.00,27.48" fill="#0d9488" fill-opacity="0.16"
+                 stroke="#0d9488" stroke-width="3" stroke-linejoin="round" />
+        <circle cx="55.70" cy="40.90" r="2.6" fill="#0d9488" opacity="0.55" />
+        <circle cx="83.00" cy="39.60" r="2.6" fill="#0d9488" opacity="0.55" />
+        <circle cx="73.90" cy="64.30" r="2.6" fill="#0d9488" opacity="0.55" />
+        <circle cx="70.00" cy="50.00" r="9" fill="#0d9488" opacity="0.9" />
+        <text x="110.00" y="62.80" text-anchor="start" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="40" font-weight="700" letter-spacing="1" fill="url(#wordmark)">CP</text>
+    </g>
+
+    <g>
+        <line x1="110.00" y1="100" x2="400.00" y2="100"
+              stroke="#0891b2" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+        <rect x="208.00" y="96.50" width="7" height="7" fill="#0891b2" opacity="0.9" />
+        <rect x="309.50" y="96.50" width="7" height="7" fill="#0891b2" opacity="0.9" />
+        <polygon points="420.00,100.00 400.00,93.00 400.00,107.00" fill="#0891b2" />
+        <polygon points="96.00,100.00 83.00,122.52 57.00,122.52 44.00,100.00 57.00,77.48 83.00,77.48" fill="#0891b2" fill-opacity="0.16"
+                 stroke="#0891b2" stroke-width="3" stroke-linejoin="round" />
+        <circle cx="55.70" cy="90.90" r="2.6" fill="#0891b2" opacity="0.55" />
+        <circle cx="83.00" cy="89.60" r="2.6" fill="#0891b2" opacity="0.55" />
+        <circle cx="73.90" cy="114.30" r="2.6" fill="#0891b2" opacity="0.55" />
+        <circle cx="70.00" cy="100.00" r="9" fill="#0891b2" opacity="0.9" />
+    </g>
+
+    <g>
+        <line x1="110.00" y1="150" x2="235.67" y2="150"
+              stroke="#2563eb" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+        <rect x="150.48" y="146.50" width="7" height="7" fill="#2563eb" opacity="0.9" />
+        <rect x="194.47" y="146.50" width="7" height="7" fill="#2563eb" opacity="0.9" />
+        <polygon points="420.00,150.00 400.00,143.00 400.00,157.00" fill="#2563eb" />
+        <polygon points="96.00,150.00 83.00,172.52 57.00,172.52 44.00,150.00 57.00,127.48 83.00,127.48" fill="#2563eb" fill-opacity="0.16"
+                 stroke="#2563eb" stroke-width="3" stroke-linejoin="round" />
+        <circle cx="55.70" cy="140.90" r="2.6" fill="#2563eb" opacity="0.55" />
+        <circle cx="83.00" cy="139.60" r="2.6" fill="#2563eb" opacity="0.55" />
+        <circle cx="73.90" cy="164.30" r="2.6" fill="#2563eb" opacity="0.55" />
+        <circle cx="70.00" cy="150.00" r="9" fill="#2563eb" opacity="0.9" />
+        <text x="396.00" y="162.80" text-anchor="end" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="40" font-weight="700" letter-spacing="1" fill="url(#wordmark)">Parallel</text>
+    </g>
+</svg>

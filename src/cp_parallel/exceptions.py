@@ -1,9 +1,13 @@
-"""
-This module defines custom exceptions for cp_parallel.
-"""
+"""Custom exceptions for cp_parallel."""
+
 
 class MaxWorkerError(Exception):
-    """
-    Raised when the number of workers assigned to `max_workers` exceeds the number of CPU/workers on the machine. 
-    """
-    pass
+    """Raised when a caller explicitly requests more workers (`max_workers`) than
+    are available on the machine (or, on HPC systems, than are allocated to the
+    current job via CPU affinity)."""
+
+
+class PlateInfoError(Exception):
+    """Raised when an entry in `plate_info_dictionary` is missing required keys
+    or combines keys in an invalid way (e.g. neither `path_to_images` nor
+    `path_to_loaddata` is provided)."""
