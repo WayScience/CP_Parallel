@@ -1,10 +1,14 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+# setuptools-scm derives the version from git tags (see `[tool.setuptools_scm]`).
+# Floors are kept low on purpose: pip builds this package with the *user's*
+# interpreter, and newer setuptools drops old Pythons (75.4+ needs >=3.9, 83+
+# needs >=3.10), which would break `pip install git+...` in CellProfiler envs.
+requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "cp_parallel"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Run CellProfiler headless in parallel across plates or wells."
 readme = "README.md"
 license = { text = "BSD-3-Clause" }
@@ -22,6 +26,12 @@ dev = [
     "ruff>=0.17.5",
     "ty>=0.0.107",
 ]
+
+[tool.setuptools_scm]
+# Version comes from the latest `vX.Y.Z` git tag -- release by tagging, no code
+# change needed. Untagged commits get e.g. `0.2.1.dev3+g1a2b3c4`. The fallback
+# only applies when building without git metadata (e.g. a GitHub source zip).
+fallback_version = "0.0.0"
 
 [tool.setuptools.packages.find]
 where = ["src"]

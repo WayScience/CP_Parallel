@@ -92,3 +92,13 @@ def test_results_to_log_decodes_string_stderr(tmp_path):
     results_to_log(results=results, log_dir=tmp_path, run_name="run", jobs=jobs)
 
     assert (tmp_path / "Plate1_run_run.log").read_text() == "ok\n"
+
+
+def test_version_matches_installed_metadata():
+    """__version__ comes from the installed package metadata (set by setuptools-scm)."""
+    from importlib.metadata import version
+
+    import cp_parallel
+
+    assert cp_parallel.__version__ == version("cp_parallel")
+    assert cp_parallel.__version__ != "0.0.0"

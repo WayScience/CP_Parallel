@@ -258,3 +258,15 @@ uv run pre-commit run --all-files
 ```
 
 CI runs both `pre-commit` and `pytest` on every push and pull request.
+
+### Releasing
+
+The package version is derived from git tags by [`setuptools-scm`](https://setuptools-scm.readthedocs.io/) -- there's no version number to edit in the code.
+To cut a release, tag the commit on `main` and push the tag (or create a GitHub release with that tag):
+
+```bash
+git tag v0.2.0
+git push origin v0.2.0  # the remote pointing at WayScience/CP_Parallel
+```
+
+Untagged commits get a development version such as `0.2.1.dev3+g1a2b3c4`. The installed version is available at runtime as `cp_parallel.__version__`.
